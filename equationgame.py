@@ -2,38 +2,34 @@ import random
 from random import randint
 import pygame
 
-
-#initialising pygame
+# initialising pygame
 pygame.init()
 
 default_image = 'chalkboard.jpg'
-#creating the screen
+# creating the screen
 screen = pygame.display.set_mode((900, 600))
 
-#title and icon
+# title and icon
 pygame.display.set_caption('Equation Game')
 icon = pygame.image.load('calculator.png')
 pygame.display.set_icon(icon)
 
-#operation options
+# operation options
 operation_options = ['+', '-', 'x', '^2']
 
 given_level = 0
 
 
-def round(image, level, selected_nums):
-
-
-    #background
+def game_round(image, level, selected_nums):
+    # background
     background = pygame.image.load(image)
 
-
-    #choosing the operations for the round
+    # choosing the operations for the round
 
     quantity = randint(1, 4)
     operations = random.sample(operation_options, k=quantity)
 
-    #choosing the numbers that will be displayed
+    # choosing the numbers that will be displayed
 
     nums = []
     while len(nums) != 8:
@@ -43,17 +39,17 @@ def round(image, level, selected_nums):
         else:
             pass
 
-    #shuffling the operations because im going to iterate through the list of them
-    shuffled_operations = random.sample(operations, k = len(operations))
+    # shuffling the operations because im going to iterate through the list of them
+    shuffled_operations = random.sample(operations, k=len(operations))
 
-    #choosing which numbers from the displayed ones, that are going to be the ones to use, and shuffling them
+    # choosing which numbers from the displayed ones, that are going to be the ones to use, and shuffling them
     nums_used = []
     if '^2' in operations:
         nums_used = random.sample(nums, k=quantity)
     else:
         nums_used = random.sample(nums, k=(quantity + 1))
 
-    #displaying the numbers
+    # displaying the numbers
 
     font = pygame.font.Font('EraserDust.ttf', 60)
     y_pos = 100
@@ -69,8 +65,7 @@ def round(image, level, selected_nums):
             screen.blit(num_to_display, (X, y))
             X += 100
 
-    #calculator which takes an equation in the form of the list
-
+    # calculator which takes an equation in the form of the list
 
     def calculator(list):
 
@@ -92,15 +87,14 @@ def round(image, level, selected_nums):
                 num *= list[i]
                 i += 1
             elif item == '^2':
-                num = num**2
+                num = num ** 2
                 i += 1
             else:
                 i += 1
 
         return num
 
-    #constructing official equation
-
+    # constructing official equation
 
     def construct_official_equation():
         official_equation = []
@@ -134,16 +128,12 @@ def round(image, level, selected_nums):
         thing_to_display = font.render(string, True, 'pink')
         screen.blit(thing_to_display, (100, 250))
 
-
     # shuffle icon
 
     def show_shuffle_icon():
         screen.blit(pygame.image.load('shuffle.png'), (820, 0))
 
-
-    #calculating the aim and constructing the equation, alongside
-
-
+    # calculating the aim and constructing the equation, alongside
 
     def calculate_number():
 
@@ -168,7 +158,7 @@ def round(image, level, selected_nums):
 
         return aim
 
-    #displaying aim at the top
+    # displaying aim at the top
 
     textX = 380
     textY = 0
@@ -177,7 +167,7 @@ def round(image, level, selected_nums):
         aim_to_display = font.render(str(calculate_number()), True, 'white')
         screen.blit(aim_to_display, (x, y))
 
-    #displaying the operations on the side
+    # displaying the operations on the side
 
     def display_operations():
         if '+' in operations:
@@ -197,7 +187,7 @@ def round(image, level, selected_nums):
         else:
             pass
 
-    #win or loss function
+    # win or loss function
 
     def win_or_loss(inputlist):
         if calculator(inputlist) == calculate_number():
@@ -205,10 +195,9 @@ def round(image, level, selected_nums):
         else:
             return False
 
-    #function that compiles user's equation
+    # function that compiles user's equation
 
     coordinates_clicked = []
-
 
     def compile_user_equation():
         users_equation = []
@@ -246,11 +235,10 @@ def round(image, level, selected_nums):
 
         return users_equation
 
-    #levels
+    # levels
     def display_level(level):
         level_to_display = font.render(f'Level: {str(level)}', True, 'white')
         screen.blit(level_to_display, (30, 0))
-
 
     # setting boundaries
 
@@ -265,19 +253,14 @@ def round(image, level, selected_nums):
             pass
         return boundary
 
-
-
-    #game loop
+    # game loop
     running = True
-
-
 
     while running:
 
         screen.fill((0, 0, 0))
-        screen.blit(background, (0,0))
+        screen.blit(background, (0, 0))
         y_pos += 0.03
-
 
         for event in pygame.event.get():
 
@@ -289,11 +272,11 @@ def round(image, level, selected_nums):
                 if (my < 100) and (mx > 800):
                     level -= 1
                     if image == 'garbage1.jpg':
-                        round('garbage1.jpg', level, [])
+                        game_round('garbage1.jpg', level, [])
                     elif image == 'chalkboard.jpg':
-                        round('chalkboard.jpg', level, [])
+                        game_round('chalkboard.jpg', level, [])
                     elif image == 'garbage2.jpg':
-                        round('garbage2.jpg', level, [])
+                        game_round('garbage2.jpg', level, [])
                     else:
                         pass
                 else:
@@ -329,28 +312,26 @@ def round(image, level, selected_nums):
                         else:
                             pass
 
-
                     if len(coordinates_clicked) == len(construct_official_equation()):
                         if win_or_loss(compile_user_equation()):
                             level += 1
                             if image == 'chalkboard.jpg':
-                                round('chalkboard.jpg', level, [])
+                                game_round('chalkboard.jpg', level, [])
                             elif image == 'garbage1.jpg':
-                                round('garbage1.jpg', level, [])
+                                game_round('garbage1.jpg', level, [])
                             else:
-                                round('garbage2.jpg', level, [])
+                                game_round('garbage2.jpg', level, [])
                         else:
                             if image == 'garbage1.jpg':
                                 display_equation()
-                                round('garbage2.jpg', level, [])
+                                game_round('garbage2.jpg', level, [])
                             elif image == 'chalkboard.jpg':
                                 display_equation()
-                                round('garbage1.jpg', level, [])
+                                game_round('garbage1.jpg', level, [])
                             else:
                                 pass
             else:
                 pass
-
 
         display_level(level)
         show_shuffle_icon()
@@ -360,5 +341,4 @@ def round(image, level, selected_nums):
         pygame.display.update()
 
 
-round('chalkboard.jpg', given_level, [])
-
+game_round('chalkboard.jpg', given_level, [])
