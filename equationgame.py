@@ -53,23 +53,25 @@ def game_round(image, level, selected_nums):
 
     font = pygame.font.Font('EraserDust.ttf', 60)
     y_pos = 100
-    nums_colour = (255, 0, 0)
+    nums_colour = (255, 153, 153)
 
     def display_numbers(y):
         X = 30
         for num in nums:
             if num in selected_nums:
-                num_to_display = font.render(str(num), True, 'yellow')
+                num_to_display = font.render(str(num), True, (191, 255, 128))
             else:
                 num_to_display = font.render(str(num), True, nums_colour)
             screen.blit(num_to_display, (X, y))
             X += 100
 
+
+        
+
     # calculator which takes an equation in the form of the list
 
     def calculator(list):
 
-        print(list)
 
         num = list[0]
 
@@ -118,6 +120,8 @@ def game_round(image, level, selected_nums):
                 official_equation.append('^2')
             else:
                 pass
+
+        print(official_equation)
 
         return official_equation
 
@@ -235,9 +239,12 @@ def game_round(image, level, selected_nums):
 
         return users_equation
 
+
+
     # levels
+
     def display_level(level):
-        level_to_display = font.render(f'Level: {str(level)}', True, 'white')
+        level_to_display = font.render(f'Round: {str(level)}', True, 'white')
         screen.blit(level_to_display, (30, 0))
 
     # setting boundaries
@@ -257,6 +264,9 @@ def game_round(image, level, selected_nums):
     running = True
 
     while running:
+
+        #todo add this to program
+        aggregate_num = 0
 
         screen.fill((0, 0, 0))
         screen.blit(background, (0, 0))
@@ -323,11 +333,13 @@ def game_round(image, level, selected_nums):
                                 game_round('garbage2.jpg', level, [])
                         else:
                             if image == 'garbage1.jpg':
-                                display_equation()
+                                level_to_display = font.render(f'Round: {construct_official_equation()}', True, 'white')
+                                screen.blit(level_to_display, (200, 200))
                                 game_round('garbage2.jpg', level, [])
                             elif image == 'chalkboard.jpg':
-                                display_equation()
                                 game_round('garbage1.jpg', level, [])
+                                level_to_display = font.render(f'Round: {construct_official_equation()}', True, 'white')
+                                screen.blit(level_to_display, (200, 200))
                             else:
                                 pass
             else:
