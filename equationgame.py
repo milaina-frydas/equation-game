@@ -1,6 +1,7 @@
 import random
 from random import randint
 import pygame
+import tkinter as tk
 
 # initialising pygame
 pygame.init()
@@ -18,6 +19,25 @@ pygame.display.set_icon(icon)
 operation_options = ['+', '-', 'x', '^2']
 
 given_level = 0
+
+def main_menu():
+    font = pygame.font.Font('EraserDust.ttf', 60)
+    background = pygame.image.load('chalkboard.jpg')
+    pygame.display.set_caption('Menu')
+
+    while True:
+        screen.blit(background, (0, 0))
+
+        menu_mouse_pos = pygame.mouse.get_pos()
+
+        menu_text = font.render('MAIN MENU', True, 'white')
+        menu_rect = menu_text.get_rect(center = (380, 0))
+
+        play_button = tk.Button(image = pygame.image.load('play.png'), pos =(820,0),
+                                text_input='play', font = font, base_colour = 'white', hovering_colour='black')
+        screen.blit(menu_text, menu_rect)
+
+main_menu()
 
 
 def game_round(image, level, selected_nums):
