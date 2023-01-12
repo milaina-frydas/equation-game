@@ -20,24 +20,74 @@ operation_options = ['+', '-', 'x', '^2']
 
 given_level = 0
 
-def main_menu():
-    font = pygame.font.Font('EraserDust.ttf', 60)
-    background = pygame.image.load('chalkboard.jpg')
-    pygame.display.set_caption('Menu')
 
-    while True:
+def main_menu():
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        background = pygame.image.load(default_image)
+
         screen.blit(background, (0, 0))
 
-        menu_mouse_pos = pygame.mouse.get_pos()
+        # Title
+        title_font = pygame.font.Font('EraserDust.ttf', 100)
+        title = title_font.render('Equation Game', True, 'white')
+        screen.blit(title, (100, 50))
 
-        menu_text = font.render('MAIN MENU', True, 'white')
-        menu_rect = menu_text.get_rect(center = (380, 0))
+        # Select Level
+        level_font = pygame.font.Font('EraserDust.ttf', 75)
+        level_select_text = level_font.render('Select Level:', True, 'white')
+        screen.blit(level_select_text, (200, 200))
 
-        play_button = tk.Button(image = pygame.image.load('play.png'), pos =(820,0),
-                                text_input='play', font = font, base_colour = 'white', hovering_colour='black')
-        screen.blit(menu_text, menu_rect)
+        button_font = pygame.font.Font('EraserDust.ttf', 40)
+        level_1_button = button_font.render('Level 1', True, 'white')
+        screen.blit(level_1_button, (350, 300))
+        level_2_button = button_font.render('Level 2', True, 'white')
+        screen.blit(level_2_button, (350, 350))
+        level_3_button = button_font.render('Level 3', True, 'white')
+        screen.blit(level_3_button, (350, 400))
 
-main_menu()
+        mouse = pygame.mouse.get_pos()
+        click = pygame.mouse.get_pressed()
+
+        if 520 + 10 > mouse[0] > 520 - 10 and 322 + 10 > mouse[1] > 322 - 10:
+            pygame.draw.circle(screen, (255, 0, 0), (520, 322), 10.0, 0)
+            if click[0] == 1:
+                image = 'chalkboard.jpg'
+                level = 1
+                selected_nums = []
+                game_round(image, level, selected_nums)
+                running = False
+        else:
+            pygame.draw.circle(screen, 'white', (520, 322), 10.0, 0)
+
+        if 520 + 10 > mouse[0] > 520 - 10 and 372 + 10 > mouse[1] > 372 - 10:
+            pygame.draw.circle(screen, (255, 0, 0), (520, 372), 10.0, 0)
+            if click[0] == 1:
+                image = 'chalkboard2.jpg'
+                level = 2
+                selected_nums = []
+                game_round(image, level, selected_nums)
+                running = False
+        else:
+            pygame.draw.circle(screen, 'white', (520, 372), 10.0, 0)
+
+        if 520 + 10 > mouse[0] > 520 - 10 and 422 + 10 > mouse[1] > 422 - 10:
+            pygame.draw.circle(screen, (255, 0, 0), (520, 422), 10.0, 0)
+            if click[0] == 1:
+                image = 'chalkboard3.jpg'
+                level = 3
+                selected_nums = []
+                game_round(image, level, selected_nums)
+                running = False
+        else:
+            pygame.draw.circle(screen, 'white', (520, 422), 10.0, 0)
+
+        pygame.display.update()
+
 
 
 def game_round(image, level, selected_nums):
@@ -372,5 +422,5 @@ def game_round(image, level, selected_nums):
         display_operations()
         pygame.display.update()
 
+main_menu()
 
-game_round('chalkboard.jpg', given_level, [])
