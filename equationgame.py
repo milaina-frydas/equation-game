@@ -54,7 +54,7 @@ def main_menu():
         click = pygame.mouse.get_pressed()
 
         if 520 + 10 > mouse[0] > 520 - 10 and 322 + 10 > mouse[1] > 322 - 10:
-            pygame.draw.circle(screen, (255, 0, 0), (520, 322), 10.0, 0)
+            pygame.draw.circle(screen, (191, 255, 128), (520, 322), 10.0, 0)
             if click[0] == 1:
                 image = 'chalkboard.jpg'
                 level = 1
@@ -62,29 +62,29 @@ def main_menu():
                 game_round(image, level, selected_nums)
                 running = False
         else:
-            pygame.draw.circle(screen, 'white', (520, 322), 10.0, 0)
+            pygame.draw.circle(screen, (255, 153, 153) , (520, 322), 10.0, 0)
 
         if 520 + 10 > mouse[0] > 520 - 10 and 372 + 10 > mouse[1] > 372 - 10:
-            pygame.draw.circle(screen, (255, 0, 0), (520, 372), 10.0, 0)
+            pygame.draw.circle(screen, (191, 255, 128), (520, 372), 10.0, 0)
             if click[0] == 1:
-                image = 'chalkboard2.jpg'
+                image = 'chalkboard.jpg'
                 level = 2
                 selected_nums = []
                 game_round(image, level, selected_nums)
                 running = False
         else:
-            pygame.draw.circle(screen, 'white', (520, 372), 10.0, 0)
+            pygame.draw.circle(screen, (255, 153, 153) , (520, 372), 10.0, 0)
 
         if 520 + 10 > mouse[0] > 520 - 10 and 422 + 10 > mouse[1] > 422 - 10:
-            pygame.draw.circle(screen, (255, 0, 0), (520, 422), 10.0, 0)
+            pygame.draw.circle(screen, (191, 255, 128), (520, 422), 10.0, 0)
             if click[0] == 1:
-                image = 'chalkboard3.jpg'
+                image = 'chalkboard.jpg'
                 level = 3
                 selected_nums = []
                 game_round(image, level, selected_nums)
                 running = False
         else:
-            pygame.draw.circle(screen, 'white', (520, 422), 10.0, 0)
+            pygame.draw.circle(screen, (255, 153, 153) , (520, 422), 10.0, 0)
 
         pygame.display.update()
 
