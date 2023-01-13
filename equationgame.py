@@ -195,6 +195,33 @@ def game_round(image, level, selected_nums):
 
         return official_equation
 
+    def tally_numbers(selected_nums, operation):
+        total = 0
+        if operation == '+':
+            for num in selected_nums:
+                total += num
+        elif operation == '-':
+            for num in selected_nums:
+                total -= num
+        elif operation == 'x':
+            total = 1
+            for num in selected_nums:
+                total *= num
+        elif operation == '^2':
+            for num in selected_nums:
+                total += num ** 2
+        return total
+
+
+    def display_result(result):
+
+        result_font = pygame.font.Font('EraserDust.ttf', 40)
+        result_text = result_font.render(str(result), True, 'white')
+        screen.blit(result_text, (650, 500))
+        pygame.display.update()
+
+
+
     def display_equation():
         string = ('')
         for item in construct_official_equation():
@@ -421,6 +448,7 @@ def game_round(image, level, selected_nums):
         show_aim(textX, textY)
         display_operations()
         pygame.display.update()
+
 
 main_menu()
 
