@@ -21,6 +21,8 @@ operation_options = ['+', '-', 'x', '^2']
 given_level = 0
 
 
+
+
 def main_menu():
     running = True
     while running:
@@ -451,4 +453,3 @@ def game_round(image, level, selected_nums):
 
 
 main_menu()
-
