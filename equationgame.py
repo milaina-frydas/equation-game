@@ -127,10 +127,14 @@ def game_round(image, level, selected_nums):
     y_pos = 100
     nums_colour = (255, 153, 153)
 
+
+#   (255, 204, 153)
     def display_numbers(y):
         X = 30
         for num in nums:
             if num in selected_nums:
+                num_to_display = font.render(str(num), True, (179, 255, 255))
+            elif num in hovering_nums:
                 num_to_display = font.render(str(num), True, (191, 255, 128))
             else:
                 num_to_display = font.render(str(num), True, nums_colour)
@@ -362,10 +366,79 @@ def game_round(image, level, selected_nums):
     # game loop
     running = True
 
+    hovering_nums = []
+
     while running:
+
+        mouse = pygame.mouse.get_pos()
 
         #todo add this to program
         aggregate_num = 0
+
+        if 9 < mouse[0] < 109 and y_pos < mouse[1] < y_pos + 50:
+            hovering_nums.append(nums[0])
+        else:
+            if nums[0] in hovering_nums:
+                hovering_nums.remove(nums[0])
+            else:
+                pass
+
+        if 109 < mouse[0] < 209 and y_pos < mouse[1] < y_pos + 50:
+            hovering_nums.append(nums[1])
+        else:
+            if nums[1] in hovering_nums:
+                hovering_nums.remove(nums[1])
+            else:
+                pass
+
+        if 209 < mouse[0] < 309 and y_pos < mouse[1] < y_pos + 50:
+            hovering_nums.append(nums[2])
+        else:
+            if nums[2] in hovering_nums:
+                hovering_nums.remove(nums[2])
+            else:
+                pass
+
+        if 309 < mouse[0] < 409 and y_pos < mouse[1] < y_pos + 50:
+            hovering_nums.append(nums[3])
+        else:
+            if nums[3] in hovering_nums:
+                hovering_nums.remove(nums[3])
+            else:
+                pass
+
+        if 409 < mouse[0] < 509 and y_pos < mouse[1] < y_pos + 50:
+            hovering_nums.append(nums[4])
+        else:
+            if nums[4] in hovering_nums:
+                hovering_nums.remove(nums[4])
+            else:
+                pass
+
+        if 509 < mouse[0] < 609 and y_pos < mouse[1] < y_pos + 50:
+            hovering_nums.append(nums[5])
+        else:
+            if nums[5] in hovering_nums:
+                hovering_nums.remove(nums[5])
+            else:
+                pass
+
+        if 609 < mouse[0] < 709 and y_pos < mouse[1] < y_pos + 50:
+            hovering_nums.append(nums[6])
+        else:
+            if nums[6] in hovering_nums:
+                hovering_nums.remove(nums[6])
+            else:
+                pass
+
+        if 709 < mouse[0] < 809 and y_pos < mouse[1] < y_pos + 50:
+            hovering_nums.append(nums[7])
+        else:
+            if nums[7] in hovering_nums:
+                hovering_nums.remove(nums[7])
+            else:
+                pass
+
 
         screen.fill((0, 0, 0))
         screen.blit(background, (0, 0))
