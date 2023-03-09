@@ -127,13 +127,15 @@ def game_round(image, level, selected_nums):
     y_pos = 100
     nums_colour = (255, 153, 153)
 
+
+#   (255, 204, 153)
     def display_numbers(y):
         X = 30
         for num in nums:
             if num in selected_nums:
-                num_to_display = font.render(str(num), True, (191, 255, 128))
+                num_to_display = font.render(str(num), True, (179, 255, 255))
             elif num in hovering_nums:
-                num_to_display = font.render(str(num), True, (255, 255, 0))
+                num_to_display = font.render(str(num), True, (191, 255, 128))
             else:
                 num_to_display = font.render(str(num), True, nums_colour)
             screen.blit(num_to_display, (X, y))
