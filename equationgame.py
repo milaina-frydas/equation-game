@@ -1,7 +1,6 @@
 import random
 from random import randint
 import pygame
-import tkinter as tk
 
 # initialising pygame
 pygame.init()
@@ -9,6 +8,7 @@ pygame.init()
 default_image = 'chalkboard.jpg'
 # creating the screen
 screen = pygame.display.set_mode((900, 600))
+
 
 # title and icon
 pygame.display.set_caption('Equation Game')
@@ -20,7 +20,72 @@ operation_options = ['+', '-', 'x', '^2']
 
 given_level = 0
 
+name = ''
 
+
+def get_username():
+
+    background = pygame.image.load(default_image)
+
+    screen.blit(background, (0, 0))
+
+    # Title
+    title_font = pygame.font.Font('EraserDust.ttf', 100)
+    text_font = pygame.font.Font('EraserDust.ttf', 70)
+    entry_font = pygame.font.Font('EraserDust.ttf', 40)
+    title = title_font.render('Equation Game', True, 'white')
+    screen.blit(title, (100, 50))
+
+    # blit text
+
+    username_text = text_font.render(f'Username:', True, (255, 153, 153))
+    screen.blit(username_text, (270, 200))
+
+    # set up the font and text input
+
+    input_box = pygame.draw.rect(screen, [255, 0, 0], [235, 300, 400, 80], 1)
+    color_inactive = pygame.Color(255, 153, 153)
+    color_active = pygame.Color(191, 255, 128)
+    color = color_inactive
+    text = ''
+    active = True
+    running_this = True
+    # start the main loop
+    while running_this:
+        # handle events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # toggle the active variable when the user clicks inside the input box
+                if input_box.collidepoint(event.pos):
+                    active = not active
+                else:
+                    active = False
+                # change the color of the input box depending on whether it is active or not
+                color = color_active if active else color_inactive
+            if event.type == pygame.KEYDOWN:
+                if active:
+                    if event.key == pygame.K_RETURN:
+                        # if the user presses enter, call main menu
+                        running_this = False
+                        global name
+                        name = text
+                        main_menu()
+
+                    elif event.key == pygame.K_BACKSPACE:
+                        # if the user presses backspace, remove the last character from the text
+                        text = text[:-1]
+                    else:
+                        # otherwise, add the pressed key to the text
+                        text += event.unicode
+
+        # draw the screen
+        pygame.draw.rect(screen, color, input_box, 2)
+        text_surface = entry_font.render(text, True, (191, 255, 128))
+        screen.blit(text_surface, (input_box.x + 5, input_box.y + 5))
+        pygame.display.flip()
 
 
 def main_menu():
@@ -61,10 +126,10 @@ def main_menu():
                 image = 'chalkboard.jpg'
                 level = 1
                 selected_nums = []
-                game_round(image, level, selected_nums)
+                game_round(image, level, selected_nums, name)
                 running = False
         else:
-            pygame.draw.circle(screen, (255, 153, 153) , (520, 322), 10.0, 0)
+            pygame.draw.circle(screen, (255, 153, 153), (520, 322), 10.0, 0)
 
         if 520 + 10 > mouse[0] > 520 - 10 and 372 + 10 > mouse[1] > 372 - 10:
             pygame.draw.circle(screen, (191, 255, 128), (520, 372), 10.0, 0)
@@ -72,10 +137,10 @@ def main_menu():
                 image = 'chalkboard.jpg'
                 level = 2
                 selected_nums = []
-                game_round(image, level, selected_nums)
+                game_round(image, level, selected_nums, name)
                 running = False
         else:
-            pygame.draw.circle(screen, (255, 153, 153) , (520, 372), 10.0, 0)
+            pygame.draw.circle(screen, (255, 153, 153), (520, 372), 10.0, 0)
 
         if 520 + 10 > mouse[0] > 520 - 10 and 422 + 10 > mouse[1] > 422 - 10:
             pygame.draw.circle(screen, (191, 255, 128), (520, 422), 10.0, 0)
@@ -83,18 +148,20 @@ def main_menu():
                 image = 'chalkboard.jpg'
                 level = 3
                 selected_nums = []
-                game_round(image, level, selected_nums)
+                game_round(image, level, selected_nums, name)
                 running = False
         else:
-            pygame.draw.circle(screen, (255, 153, 153) , (520, 422), 10.0, 0)
+            pygame.draw.circle(screen, (255, 153, 153), (520, 422), 10.0, 0)
 
         pygame.display.update()
 
 
+def game_round(image, level, selected_nums, username):
 
-def game_round(image, level, selected_nums):
     # background
     background = pygame.image.load(image)
+
+    highscore = ['', '0']
 
     # choosing the operations for the round
 
@@ -127,9 +194,18 @@ def game_round(image, level, selected_nums):
     y_pos = 100
     nums_colour = (255, 153, 153)
 
+    #   (255, 204, 153)
+    def display_numbers(y, level_par):
 
-#   (255, 204, 153)
-    def display_numbers(y):
+        # find_hs()
+
+        hs_font = pygame.font.Font('EraserDust.ttf', 15)
+        hs_text = hs_font.render(f'High Score: {highscore[1]}\nBy: {highscore[0]}', True, 'black')
+        screen.blit(hs_text, (780, 560))
+
+        if y >= 550:
+            level_par -= 1
+            game_round(image, level_par, [], username)
         X = 30
         for num in nums:
             if num in selected_nums:
@@ -141,28 +217,24 @@ def game_round(image, level, selected_nums):
             screen.blit(num_to_display, (X, y))
             X += 100
 
-
-        
-
     # calculator which takes an equation in the form of the list
 
-    def calculator(list):
+    def calculator(listo):
 
-
-        num = list[0]
+        num = listo[0]
 
         i = 1
 
-        for item in list:
+        for item in listo:
 
             if item == '+':
-                num += list[i]
+                num += listo[i]
                 i += 1
             elif item == '-':
-                num = num - list[i]
+                num = num - listo[i]
                 i += 1
             elif item == 'x':
-                num *= list[i]
+                num *= listo[i]
                 i += 1
             elif item == '^2':
                 num = num ** 2
@@ -175,7 +247,7 @@ def game_round(image, level, selected_nums):
     # constructing official equation
 
     def construct_official_equation():
-        official_equation = []
+        official_equation = list()
 
         official_equation.append(nums_used[0])
         i = 1
@@ -200,40 +272,6 @@ def game_round(image, level, selected_nums):
         print(official_equation)
 
         return official_equation
-
-    def tally_numbers(selected_nums, operation):
-        total = 0
-        if operation == '+':
-            for num in selected_nums:
-                total += num
-        elif operation == '-':
-            for num in selected_nums:
-                total -= num
-        elif operation == 'x':
-            total = 1
-            for num in selected_nums:
-                total *= num
-        elif operation == '^2':
-            for num in selected_nums:
-                total += num ** 2
-        return total
-
-
-    def display_result(result):
-
-        result_font = pygame.font.Font('EraserDust.ttf', 40)
-        result_text = result_font.render(str(result), True, 'white')
-        screen.blit(result_text, (650, 500))
-        pygame.display.update()
-
-
-
-    def display_equation():
-        string = ('')
-        for item in construct_official_equation():
-            string += str(item)
-        thing_to_display = font.render(string, True, 'pink')
-        screen.blit(thing_to_display, (100, 250))
 
     # shuffle icon
 
@@ -342,26 +380,33 @@ def game_round(image, level, selected_nums):
 
         return users_equation
 
-
-
     # levels
 
     def display_level(level):
         level_to_display = font.render(f'Round: {str(level)}', True, 'white')
         screen.blit(level_to_display, (30, 0))
 
-    # setting boundaries
+    # recording score
 
-    def set_boundaries():
-        if level == 0:
-            boundary = 600
-        elif level == 1:
-            boundary = 493
-        elif level == 2:
-            boundary = 428
-        else:
-            pass
-        return boundary
+    # def find_hs():
+    #     with open('scores.txt', 'r') as file:
+    #         for i, line in enumerate(file):
+    #             if i % 2 != 0:
+    #                 print(line.strip())
+    #                 if int(line.strip()) > int(highscore[1]):
+    #                     print((file.readlines()[i+1]).strip())
+    #                     highscore[0] = (file.readlines()[i-1]).strip()
+    #                     highscore[1] = line.strip()
+    #                 else:
+    #                     pass
+    #             else:
+    #                 pass
+
+    def record_score(usernamey, score):
+
+        with open('scores.txt', 'a') as f:
+            # write the name and score to the file, separated by a comma
+            f.write(f"{usernamey}\n{score}\n")
 
     # game loop
     running = True
@@ -370,10 +415,9 @@ def game_round(image, level, selected_nums):
 
     while running:
 
-        mouse = pygame.mouse.get_pos()
+        # highs core
 
-        #todo add this to program
-        aggregate_num = 0
+        mouse = pygame.mouse.get_pos()
 
         if 9 < mouse[0] < 109 and y_pos < mouse[1] < y_pos + 50:
             hovering_nums.append(nums[0])
@@ -439,7 +483,6 @@ def game_round(image, level, selected_nums):
             else:
                 pass
 
-
         screen.fill((0, 0, 0))
         screen.blit(background, (0, 0))
         y_pos += 0.03
@@ -447,6 +490,7 @@ def game_round(image, level, selected_nums):
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
+                record_score(username, level)
                 exit()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -454,11 +498,11 @@ def game_round(image, level, selected_nums):
                 if (my < 100) and (mx > 800):
                     level -= 1
                     if image == 'garbage1.jpg':
-                        game_round('garbage1.jpg', level, [])
+                        game_round('garbage1.jpg', level, [], username)
                     elif image == 'chalkboard.jpg':
-                        game_round('chalkboard.jpg', level, [])
+                        game_round('chalkboard.jpg', level, [], username)
                     elif image == 'garbage2.jpg':
-                        game_round('garbage2.jpg', level, [])
+                        game_round('garbage2.jpg', level, [], username)
                     else:
                         pass
                 else:
@@ -498,31 +542,29 @@ def game_round(image, level, selected_nums):
                         if win_or_loss(compile_user_equation()):
                             level += 1
                             if image == 'chalkboard.jpg':
-                                game_round('chalkboard.jpg', level, [])
+                                game_round('chalkboard.jpg', level, [], username)
                             elif image == 'garbage1.jpg':
-                                game_round('garbage1.jpg', level, [])
+                                game_round('garbage1.jpg', level, [], username)
                             else:
-                                game_round('garbage2.jpg', level, [])
+                                game_round('garbage2.jpg', level, [], username)
                         else:
-                            if image == 'garbage1.jpg':
-                                level_to_display = font.render(f'Round: {construct_official_equation()}', True, 'white')
-                                screen.blit(level_to_display, (200, 200))
-                                game_round('garbage2.jpg', level, [])
-                            elif image == 'chalkboard.jpg':
-                                game_round('garbage1.jpg', level, [])
-                                level_to_display = font.render(f'Round: {construct_official_equation()}', True, 'white')
-                                screen.blit(level_to_display, (200, 200))
+                            level -= 1
+                            if image == 'chalkboard.jpg':
+                                game_round('chalkboard.jpg', level, [], username)
+                            elif image == 'garbage1.jpg':
+                                game_round('garbage1.jpg', level, [], username)
                             else:
-                                pass
+                                game_round('garbage2.jpg', level, [], username)
+
             else:
                 pass
 
         display_level(level)
         show_shuffle_icon()
-        display_numbers(y_pos)
+        display_numbers(y_pos, level)
         show_aim(textX, textY)
         display_operations()
         pygame.display.update()
 
 
-main_menu()
+get_username()
